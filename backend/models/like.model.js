@@ -28,3 +28,23 @@ export const getAllPostModel = async (req,res) => {
       res.status(500).json({ error: 'Error getting all posts: ' + error.message }); // Enviar el error al cliente
     }
   };
+
+  //put, se hace por id y por lo que le pasamos por body
+  export const putPostModel= async (id,{likes} )=>{
+try {
+    const refreshPost= await pool.query('UPDATE post SET likes=$1 WHERE id=$2 RETURNING*',[likes,id])
+    return refreshPost.rows[0];
+} catch (error) {
+  throw new Error('Error updating post: ' + error.message);
+}
+  }
+
+//DELETE
+export const deletePostModel = async (id) => {
+  try {
+    const deletedPost = await pool.query('DELETE FROM post WHERE id = $1 RETURNING *', [id]);
+    return deletedPost.rows[0];
+  } catch (error) {
+    throw new Error('Error deleting post: ' + error.message);
+  }
+}

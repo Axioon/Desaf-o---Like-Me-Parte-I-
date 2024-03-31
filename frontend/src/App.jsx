@@ -33,9 +33,19 @@ function App() {
     getPosts();
   };
 
+
+
   // este método se utilizará en el siguiente desafío
-  const like = async (id) => {
-    await axios.put(urlBaseServer + `/posts/like/${id}`);
+  const like = async (id, likes) => {
+    console.log("ID del post:", id);
+    // Actualiza el número de likes en el estado antes de enviar la solicitud PUT
+    const updatedPosts = posts.map((p) =>
+      p.id === id ? { ...p, likes: likes } : p
+    );
+    setPosts(updatedPosts);
+  
+    // Envia la solicitud PUT para actualizar los likes en el servidor
+    await axios.put(`${urlBaseServer}/posts/${id}`, { id, likes });
     getPosts();
   };
 
